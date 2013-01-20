@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://blog.agirei.com/</id>
+  <title>agirei</title>
+  <updated>2012-02-10T08:00:00Z</updated>
+  <link rel="alternate" href="http://blog.agirei.com/"/>
+  <link rel="self" href="http://blog.agirei.com/rss.xml"/>
+  <author>
+    <name>Piotr Zolnierek</name>
+    <uri>http://github.com/pzol</uri>
+  </author>
+  <entry>
+    <id>tag:blog.agirei.com,2012-02-10:/2013/01/moving-from-octopress-to-nanoc/</id>
+    <title type="html">Moving from Octopress to Nanoc</title>
+    <published>2012-02-10T08:00:00Z</published>
+    <updated>2012-02-10T08:00:00Z</updated>
+    <link rel="alternate" href="http://blog.agirei.com/2013/01/moving-from-octopress-to-nanoc/"/>
+    <content type="html">&lt;p&gt;Finally got my stuff together to move from Octopress to &lt;a href="http://nanoc.stoneship.org/"&gt;nanoc&lt;/a&gt;. Octopress was fine, but the structure drove me wild!&lt;/p&gt;
+
+&lt;p&gt;Highlighting a piece of &lt;code&gt;ruby&lt;/code&gt; code&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;sweet&lt;/span&gt;
+  &lt;span class="s2"&gt;"nanoc is sweet"&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Thanks to Dropbox syncing I can write on my iPad or iPhone, too.&lt;/p&gt;
+
+&lt;p&gt;So no more excuses not to blog :D&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:blog.agirei.com,2012-02-02:/2012/02/object-oriented-acceptance-tests-rspec/</id>
+    <title type="html">OOP Acceptance Tests with Rspec</title>
+    <published>2012-02-02T10:11:00Z</published>
+    <updated>2012-02-02T10:11:00Z</updated>
+    <link rel="alternate" href="http://blog.agirei.com/2012/02/object-oriented-acceptance-tests-rspec/"/>
+    <content type="html">&lt;p&gt;This is part two of my blog post about Acceptance Testing. In the previous post I outlined some basics, now let's get into the code.&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;h2&gt;A real life example&lt;/h2&gt;
+
+&lt;p&gt;The tests I will be showing you are based on a real-life example, which I have (vastly) simplified for this article.&lt;/p&gt;
+
+&lt;p&gt;The source code for the test application is available at &lt;a href="https://github.com/pzol/acceptance_testing"&gt;https://github.com/pzol/acceptance_testing&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Know your tools&lt;/h2&gt;
+
+&lt;p&gt;If you want to dive deep into acceptance testing, you can skip this part.&lt;/p&gt;
+
+&lt;p&gt;{% pullquote %}
+In order to be productive and not waste time with repeating tasks, I find it very important to setup an environment which {" automates fast feedback from the first minute "} about what is going on in your application and your tests. 
+{% endpullquote %}&lt;/p&gt;
+
+&lt;p&gt;The tools I use here are&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="https://www.relishapp.com/rspec"&gt;Rspec&lt;/a&gt; &lt;/li&gt;
+&lt;li&gt;
+&lt;a href="https://github.com/guard/guard"&gt;Guard&lt;/a&gt; - for running specs as they change&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt; - to help testing the web application&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;This is how my &lt;code&gt;.rspec&lt;/code&gt; looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;--color
+--format progress
+--fail-fast
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will format the output in color, display the output in dots (progress) format and most importantly turn on fail-fast, which will stop the tests at the first error!&lt;/p&gt;
+
+&lt;p&gt;For running single tests via Guard, I can override this options in the Guardfile&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="n"&gt;guard&lt;/span&gt; &lt;span class="s1"&gt;'rspec'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:version&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:cli&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="s2"&gt;"--format nested"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:notification&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;true&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+  &lt;span class="n"&gt;watch&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;%r{^spec/.+_spec\.rb$}&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can run the application under test using  &lt;code&gt;bundle exec rackup&lt;/code&gt;&lt;br&gt;
+then go with your browser to &lt;code&gt;http://localhost:9292&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2&gt;Test Data&lt;/h2&gt;
+
+&lt;p&gt;As the system shall test the application end-to-end we need some test data, I have actually exported from a real database and saved as json&lt;/p&gt;
+
+&lt;h2&gt;My ideal acceptance test&lt;/h2&gt;
+
+&lt;p&gt;This is how I imagine an &lt;em&gt;acceptance test&lt;/em&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="n"&gt;scenario&lt;/span&gt; &lt;span class="s1"&gt;'latest transactions'&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+  &lt;span class="n"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;TestUser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;new&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;Role&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="ss"&gt;:TransactionsBrowser&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;visit_latest_transactions&lt;/span&gt;
+  &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sees_transactions_table!&lt;/span&gt;
+
+
+  &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sees_transactions_table!&lt;/span&gt;
+  &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all_table_rows&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt; 
+    &lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;timestamp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be_a&lt;/span&gt; &lt;span class="no"&gt;DateTime&lt;/span&gt; 
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Although I generally recommend not to clutter your scenario with shoulds or asserts, sometimes having them means is faster and means much less code. Not having them adds the minor benefit, that you are not depending on a particular testing framework.&lt;/p&gt;
+
+&lt;h2&gt;The TestUser class&lt;/h2&gt;
+
+&lt;p&gt;It represents the Data in DCI. For the RSpec I create an empty class and add the &lt;code&gt;Capybara::DSL&lt;/code&gt; as well as the &lt;code&gt;Capybara::RSpecMatchers&lt;/code&gt;. Those will make available all the nice Capybara and RSpec matchers within the &lt;code&gt;TestUser&lt;/code&gt; class and also to its instances.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;TestUser&lt;/span&gt;
+  &lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="ss"&gt;RSpec&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="ss"&gt;:Matchers&lt;/span&gt;
+  &lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="ss"&gt;Capybara&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="ss"&gt;:DSL&lt;/span&gt;
+  &lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="ss"&gt;Capybara&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="ss"&gt;:RSpecMatchers&lt;/span&gt;
+  &lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="ss"&gt;Role&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="ss"&gt;:Navigator&lt;/span&gt;
+  &lt;span class="kp"&gt;include&lt;/span&gt; &lt;span class="ss"&gt;Role&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="ss"&gt;:Verifier&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;The TransactionBrowser Role&lt;/h2&gt;
+
+&lt;p&gt;It contains all the role methods which a person browsing the transactions might do.&lt;br&gt;
+The transactions page contains a list of transactions which have been sent to some API.&lt;/p&gt;
+
+&lt;p&gt;By calling &lt;code&gt;user.sees_transactions_table!&lt;/code&gt; I define that the user sees the table. We intuitively know what it means to see that table and if it is alright. So mapping this to my mental model I only have this terse command with the bang! at the end, which means this is an &lt;em&gt;assertion&lt;/em&gt;.  Inside this method I describe what it means, that the table is displayed correctly.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;sees_transactions_table!&lt;/span&gt;
+  &lt;span class="n"&gt;headers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sx"&gt;%w[timestamp contract facility method time_taken product]&lt;/span&gt;
+  &lt;span class="k"&gt;begin&lt;/span&gt; 
+    &lt;span class="n"&gt;thead&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'#transactionsTable thead'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; 
+  &lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="ss"&gt;Capybara&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="ss"&gt;:ElementNotFound&lt;/span&gt;
+    &lt;span class="k"&gt;raise&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"Could not find the transactionsTable in &lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'#summary'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+  &lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;each&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="n"&gt;thead&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;have_content&lt;/span&gt; &lt;span class="n"&gt;h&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="n"&gt;table_rows&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rows&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What is very important here, that we verify, that we have the correct page loaded and if not to display the error message in the test results, otherwise you will be doing a lot of 'puts-driven-development'.  &lt;/p&gt;
+
+&lt;p&gt;I know that Sinatra displays its error in the &lt;code&gt;#summary&lt;/code&gt; div, so I pick just this to be shown in my test results, Capybara nicely strips all the html around, so it is very readable in the console:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="no"&gt;Could&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;find&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;transactionsTable&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; 
+       &lt;span class="no"&gt;NoMethodError&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;
+
+       &lt;span class="n"&gt;undefined&lt;/span&gt; &lt;span class="nb"&gt;method&lt;/span&gt; &lt;span class="sb"&gt;`&amp;lt;&amp;lt;' for nil:NilClass&lt;/span&gt;
+&lt;span class="sb"&gt;       file: &lt;/span&gt;
+&lt;span class="sb"&gt;           latest_transactions_context.rb&lt;/span&gt;
+&lt;span class="sb"&gt;         location: block in call&lt;/span&gt;
+
+&lt;span class="sb"&gt;         line:&lt;/span&gt;
+&lt;span class="sb"&gt;            6&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next I verify all the table rows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all_table_rows&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt; 
+  &lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;timestamp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be_a&lt;/span&gt; &lt;span class="no"&gt;DateTime&lt;/span&gt; 
+  &lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;contract&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'test'&lt;/span&gt;
+  &lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;facility&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'api.test'&lt;/span&gt;
+  &lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;method&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'hotels'&lt;/span&gt;
+  &lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time_taken&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be_a&lt;/span&gt; &lt;span class="no"&gt;Fixnum&lt;/span&gt;
+  &lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;product&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;'HOTEL'&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, now that we are done with the basic sunny day scenario, we need the user to be able to search. Writing the scenario first.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;  &lt;span class="n"&gt;scenario&lt;/span&gt; &lt;span class="s1"&gt;'search by time_taken'&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;Role&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="ss"&gt;:TimeTakenSearcher&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;visit_latest_transactions&lt;/span&gt;
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sees_transactions_table!&lt;/span&gt;
+
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;searches_for_time_taken&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;time_taken&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;20000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sees_transactions_table!&lt;/span&gt;
+
+    &lt;span class="n"&gt;user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all_table_rows&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+      &lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time_taken&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;time_taken&lt;/span&gt;
+    &lt;span class="k"&gt;end&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I can reuse easily the a lot of the code I used earlier. The new thing here is &lt;code&gt;user.searches_for_time_taken(time_taken = 20000)&lt;/code&gt;. This will hide the ugly details of filling boxes and clicking, and is so much more readable.&lt;br&gt;
+I consciously am &lt;strong&gt;not&lt;/strong&gt; checking for the count of rows as in the first example. I am verifying only what makes this scenario successful, which is the time_taken. This makes the tests also less brittle in case I decide to change the underlying test data later. &lt;/p&gt;
+
+&lt;p&gt;I introduce a new role &lt;code&gt;Role::TimeTakenSearcher&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;Role&lt;/span&gt;
+  &lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;TimeTakenSearcher&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;searches_for_time_taken&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;time_taken&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+      &lt;span class="n"&gt;fill_in&lt;/span&gt; &lt;span class="s1"&gt;'time_taken'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;:with&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;time_taken&lt;/span&gt;
+      &lt;span class="n"&gt;click_button&lt;/span&gt;&lt;span class="s1"&gt;'searchButton'&lt;/span&gt;
+    &lt;span class="k"&gt;end&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Browser-less web-development promotes reliable acceptance tests&lt;/h2&gt;
+
+&lt;p&gt;While writing the accompanying application for this article, I decided &lt;strong&gt;not&lt;/strong&gt; to open the browser, especially when errors occurred. It was difficult at first, but in the end it saved me a lot of time and it made my tests so much more reliable. It forced me to have more descriptive error messages.&lt;/p&gt;
+
+&lt;h2&gt;A word about test-speed&lt;/h2&gt;
+
+&lt;p&gt;I am a fan of &lt;a href="https://github.com/guard/guard"&gt;Guard&lt;/a&gt;, every time I save it runs the test I am working on in the background and notifies me by Growl if the test passed or not. Thus fast feedback is important for my workflow.&lt;/p&gt;
+
+&lt;p&gt;A single test should run fast, always, by that I mean less than 500 ms. On top of that comes the startup time. For Sinatra and Padrino that's usually 2-3 secs, for Rails... well... you might want to use Spork there.&lt;/p&gt;
+
+&lt;p&gt;That's another reason why you should have an object oriented design in your code, so you can use regular unit tests&lt;/p&gt;
+
+&lt;p&gt;Please do include unit test. Acceptance test show you if the system as a whole is working, but as they see it only from the user's point of view, they may not show you where the system is broken.&lt;/p&gt;
+
+&lt;h2&gt;Remember the rules&lt;/h2&gt;
+
+&lt;p&gt;When I write a new page, I start with the &lt;strong&gt;outside-inside&lt;/strong&gt; principle (or also called feature injection) and &lt;strong&gt;TDD&lt;/strong&gt;. I create a test, describing what I expect the page to look like. Then I write the view in html or haml to make the test pass. Only then start replacing the mockup of the page with logic!&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:blog.agirei.com,2011-02-14:/2011/02/experience-vs-attitude/</id>
+    <title type="html">Experience vs Attitude</title>
+    <published>2011-02-14T13:00:00Z</published>
+    <updated>2011-02-14T13:00:00Z</updated>
+    <link rel="alternate" href="http://blog.agirei.com/2011/02/experience-vs-attitude/"/>
+    <content type="html">&lt;p&gt;When interviewing new people for a job as an agile developer, what qualities should you be looking for?
+Is it sufficient to check the previous experience and the knowledge in the areas he will be needing for your projects or is the attitude more important?&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;h3&gt;Attitude&lt;/h3&gt;
+
+&lt;p&gt;A developer is like an engineer, always looking for improvement, always trying out new things and trying to make his work more productive, 
+at the same time he is proud of his work and makes sure it works properly. What has made him act this way is his attitude.&lt;/p&gt;
+
+&lt;p&gt;Then you have programmers, which simply translate instructions into code.&lt;/p&gt;
+
+&lt;p&gt;I like the word developer, as it derives from development, according to the dictionary, to develop means &lt;em&gt;to grow or cause to grow and become more mature, advanced, or elaborate&lt;/em&gt;. 
+Hence a developer is somebody who &lt;strong&gt;causes some application to grow and become more advanced&lt;/strong&gt;. A programmer just translates ideas into code. This is not enough.&lt;/p&gt;
+
+&lt;p&gt;According to &lt;a href="http://en.wikipedia.org/wiki/Attitude_(psychology"&gt;wikipedia&lt;/a&gt;, attitude is &lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;An attitude is a hypothetical construct that represents an individual's degree of like or dislike for something. &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Another view of what attitude is comes from buddhism, there we have the &lt;a href="http://www.thebigview.com/buddhism/eightfoldpath.html"&gt;Eightfold Path&lt;/a&gt;, 
+which is the way to end suffering, i.e. achieve Nirvana. 
+In terms of software to reach Nirvana, is to end all suffering coming from maintaining legacy project.&lt;/p&gt;
+
+&lt;p&gt;An excerpt says:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Right effort can be seen as a prerequisite for the other principles of the path. 
+Without effort, which is in itself an act of will, nothing can be achieved, 
+whereas misguided effort distracts the mind from its task, 
+and confusion will be the consequence. 
+Mental energy is the force behind right effort; it can occur in either wholesome or unwholesome states. &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For me in our context this means, that somebody needs to &lt;strong&gt;be determined to do the right thing&lt;/strong&gt; 
+and that attitude or the right effort is the prerequisite to become a great developer.&lt;/p&gt;
+
+&lt;p&gt;In real life a developer needs to behave accordingly in all kind of daily situations. 
+As our team becomes more cross-functional, not only in terms of specialization on programming languages or special areas of expertise within the area of coding,
+a developer needs to have the right &lt;strong&gt;likes&lt;/strong&gt; of the following areas:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Quality - A developer needs to have the right attitude to automate deployment, so that every time her work is put into production it works flawlessly.
+Quality means predictability, that said, a developer needs to work on a proper test suite, making sure what was working once, doesn't get broken accidentally.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Customer Value - what we build must be valuable for the customer, developer must avoid creating waste and 
+&lt;strong&gt;communicate&lt;/strong&gt; with the customer directly to make sure to have the same common understanding of value.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Continuous Learning - a developer must always learn new things, in his technology, programming language and also in other areas like databases, operating systems etc.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;h3&gt;Experience&lt;/h3&gt;
+
+&lt;p&gt;Then on the other hand there is experience, which is the sum of a person has learned, of all mistakes he did, of everything good or bad, 
+that happened in his life.&lt;/p&gt;
+
+&lt;p&gt;If you are building a new team or a new project where you have no expertise yet, you might want to lay more emphasis on experience and hire people, 
+which have already done what you are trying to accomplish.&lt;/p&gt;
+
+&lt;p&gt;We all learn by trial and error, especially software engineers need to see for themselves what is working and what is not.
+Then on the other hand, we cannot allow to make mistakes which jeopardize our customers business.&lt;/p&gt;
+
+&lt;p&gt;In order to move forward safely, you have to have people which have made a reasonable amount of errors so they won't do them on your new mission-critical project.&lt;/p&gt;
+
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;In my opinion the art (as in martial art) of software development requires people to be truly cross-functional 
+- in their abilities to learn, to take on tasks which are not necessarily their favorite 
+and to continuously &lt;em&gt;steal&lt;/em&gt; knowledge from other areas in order to keep improving.
+Thus, the conclusion for me is straightforward, the right effort or in other words the right attitude, is crucial, specific skill can be acquired along the path.&lt;/p&gt;
+
+&lt;p&gt;So in the end, the right answer is - it depends. If you are looking for a long-term investment, and already have a basis, 
+you might lay less importance on experience and more on the right attitude. &lt;/p&gt;
+
+&lt;p&gt;If you do not have a solid foundation in the form of experienced people, you really need to build that first. 
+You can build good software with unexperienced people, it will take longer and will cost you more, 
+but with people with a bad attitude you will most probably build bad software, which will be hard to maintain.&lt;/p&gt;</content>
+  </entry>
+</feed>
+.
