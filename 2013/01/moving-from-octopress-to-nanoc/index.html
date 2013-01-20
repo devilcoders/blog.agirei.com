@@ -28,7 +28,7 @@
           
   <div class='post'>
     <h1>Moving from Octopress to Nanoc</h1>
-    <aside>Posted at: February 10, 2012</aside>
+    <aside>Posted at: 2012-02-10 10:00:00 +0100</aside>
     <article>
       <p>Finally got <a href="http://nanoc.stoneship.org/">Nanoc</a> working, to replace my old Octopress blog. Octopress was fine, but the structure drove me wild!</p>
 
@@ -41,7 +41,7 @@
 <p>Here's the code how I got this working from <code>Rules</code> file:</p>
 
 <pre><code class="language-ruby"><span class="n">compile</span> <span class="s1">'/posts/*/'</span> <span class="k">do</span>
-  <span class="c1"># filter :erb</span>
+  <span class="n">filter</span> <span class="ss">:erb</span>
   <span class="n">filter</span> <span class="ss">:redcarpet</span><span class="p">,</span> <span class="ss">options</span><span class="p">:</span> <span class="p">{</span>
     <span class="n">fenced_code_blocks</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
     <span class="ss">autolink</span><span class="p">:</span> <span class="kp">true</span>
