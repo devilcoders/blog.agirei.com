@@ -381,5 +381,167 @@ you might lay less importance on experience and more on the right attitude. &lt;
 You can build good software with unexperienced people, it will take longer and will cost you more, 
 but with people with a bad attitude you will most probably build bad software, which will be hard to maintain.&lt;/p&gt;</content>
   </entry>
+  <entry>
+    <id>tag:blog.agirei.com,2011-02-09:/2011/02/holistic-deployment/</id>
+    <title type="html">Holistic Deployment</title>
+    <published>2011-02-09T01:14:00Z</published>
+    <updated>2011-02-09T01:14:00Z</updated>
+    <link rel="alternate" href="http://blog.agirei.com/2011/02/holistic-deployment/"/>
+    <content type="html">&lt;p&gt;Your agile team has built great software, only to find out it cannot work in production?  &lt;/p&gt;
+
+&lt;p&gt;Agile has taken the development community by storm. It has improved our everyday lives. It enables us to build great working software in all kinds of environments.
+But for many companies, covering the last mile, bringing an application into production is the biggest obstacle to being truly agile. 
+Prescribed processes and skill-sets in operations lag behind a decade.
+We have created cross-functional teams, excluding one of the most important aspects of of software - it needs to run in production! &lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;h3&gt;The Problem&lt;/h3&gt;
+
+&lt;p&gt;Devs become quicker in delivering releases and new customer value.&lt;br&gt;
+Ops cannot release as often as Devs.  &lt;/p&gt;
+
+&lt;p&gt;Devs don't know or understand production infrastructure.&lt;br&gt;
+Devs develop software that &lt;em&gt;works on my machine&lt;/em&gt;.  &lt;/p&gt;
+
+&lt;p&gt;Ops don't do TDD, don't automate. Our sysadmins, cannot write code (messy bash scripts is about the max).&lt;br&gt;
+Ops needs days or even weeks to deploy something to production, because of their own queuing.&lt;/p&gt;
+
+&lt;p&gt;Separating Dev and Ops creates a waterfall. If anything breaks, the feedback cycle is long!  &lt;/p&gt;
+
+&lt;h3&gt;Conflict of interests&lt;/h3&gt;
+
+&lt;p&gt;Devs and Ops have been created in most organizations to fulfill a separate role. Devs are designed for change. Ops are designed for preservation.
+As the organization matures, each department evolves into it's own direction and have their own goals, sometimes forgetting they both serve the same purpose.&lt;/p&gt;
+
+&lt;p&gt;Product Owners want new value asap - on production - that's understood.&lt;br&gt;
+Developers want to release more often.&lt;br&gt;
+Ops want high availability, stability, reliability.&lt;/p&gt;
+
+&lt;p&gt;Both Devs and Ops, from their perspective, want the best for the business.
+Only, optimizing any subsystem without context, leads to the destabilization of the system as a whole, de facto decreasing overall performance.&lt;/p&gt;
+
+&lt;p&gt;Deployment is complex, high risk, error prone and thus holds a risk of destabilization.&lt;/p&gt;
+
+&lt;h3&gt;Anti-Patterns&lt;/h3&gt;
+
+&lt;p&gt;The reasons why Ops departments were created - at least in our case - because there were some anti-patterns which deteriorated our quality and our reputation with customers.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt; AdHoc Release - Devs would deploy as soon as they made quick fixes to the application.&lt;/li&gt;
+&lt;li&gt; Production Patching - Sysadmins change configs and other parts directly on production, nobody knows what they changed&lt;/li&gt;
+&lt;li&gt; Service Monolith - the apps are not modular enough or not modular the way and nobody understood how they work together.&lt;/li&gt;
+&lt;li&gt; Lack of Automation - the whole deploy process was done manually, every time!&lt;/li&gt;
+&lt;/ul&gt;&lt;h3&gt;What we need to focus on&lt;/h3&gt;
+
+&lt;p&gt;It is &lt;strong&gt;not&lt;/strong&gt; about bringing agile practices to operations, this is a must anyway. Although Kanban is ideal for that kind of endeavor, 
+we do not want only to copy-paste our practices to another department.  &lt;/p&gt;
+
+&lt;p&gt;We need to focus on the right effort. We are all connected by one purpose, 
+we all need to take have the right mindset to work together on a product as a whole to provide a tremendous customer service.&lt;/p&gt;
+
+&lt;p&gt;Thus we need all to keep in mind what is most important:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Business Value &lt;/li&gt;
+&lt;li&gt;Predictability, Repeatable processes&lt;/li&gt;
+&lt;li&gt;Stability, Uptime&lt;/li&gt;
+&lt;/ol&gt;&lt;h3&gt;About DevOps&lt;/h3&gt;
+
+&lt;p&gt;The Devops movement has done a good job to bring out, many of the pain-points of the current sysadmin vs developer silo situation. 
+I have been hoping, that admins and ops will someday understand, that they must do more than install software, hardware and search logs.&lt;/p&gt;
+
+&lt;p&gt;I kind of like the word Devops.&lt;br&gt;
+To me it means that sysadmins will be more like developers, adhere to the high standards of developers which have evolved over the last years with xp and agile.
+It means to me that automated installation will bring us an repeatable process. No repeating mistakes. Identical production servers. No exceptions. 
+Setting up new machines will be easy fast thing as bringing new functionality to the software.&lt;br&gt;
+Current Sysadmins must understand, they are like 32bit hardware, to be retired in the near future, unless they adapt and upgrade themselves!&lt;/p&gt;
+
+&lt;p&gt;On the other hand, developers must fully acknowledge, that their software is only  if it works in production. 
+The Definition of Done has to be extended to "Running of Production". Every sprint.&lt;/p&gt;
+
+&lt;h3&gt;Duties&lt;/h3&gt;
+
+&lt;p&gt;Let's have a look at the responsibilities of our two parties.
+Despite that Devops want to include QA into their new movement, 
+I will argue that QA is a duty of both Devs and Ops anyway and thus not talk further about it (either it works or it doesn't).&lt;/p&gt;
+
+&lt;p&gt;Let's have a look at the duties of the different roles in an organization like mine - &lt;a href="http://www.anixe.pl"&gt;anixe&lt;/a&gt;
+- where we develop software for e-commerce to run our customers businesses.&lt;/p&gt;
+
+&lt;p&gt;Duties of Sysadmins:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Systems &amp;amp; Applications Administration&lt;/li&gt;
+&lt;li&gt;Infrastructure Management&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;Duties of Ops:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;24×7 Tech Support&lt;/li&gt;
+&lt;li&gt;Deployment&lt;/li&gt;
+&lt;li&gt;Testing &amp;amp; Quality Assurance (QA)&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;Duties of Dev:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Builds &amp;amp; Configuration&lt;/li&gt;
+&lt;li&gt;Release Management&lt;/li&gt;
+&lt;li&gt;Testing &amp;amp; Quality Assurance (QA)&lt;/li&gt;
+&lt;li&gt;Technical Analysis&lt;/li&gt;
+&lt;li&gt;Technical Project Management&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;What's wrong with this picture?&lt;/p&gt;
+
+&lt;p&gt;Sysadmins are responsible for Applications - how could they, if they haven't built them (just assume changes happen fast)&lt;br&gt;
+Ops are responsible for deployment - cool, but if it doesn't work, they're helpless without Devs assistance&lt;br&gt;
+Ops are responsible for Testing - ouch - again, they need to be taught what to test and testing and building is not happening in the same iteration&lt;br&gt;
+Devs don't know what's going on on production  &lt;/p&gt;
+
+&lt;h3&gt;Possible Solution for a harmonious together&lt;/h3&gt;
+
+&lt;p&gt;This is not just one possible solution, there are others as well, but here is a temporary one we might want to try.
+In &lt;strong&gt;this&lt;/strong&gt; context, Ops are sysadmins, the rest of Ops should be part of the agile development teams anyway. I just don't see how we could integrate admins, which are specialist and only required "rarely" once a platform is up and running.&lt;/p&gt;
+
+&lt;p&gt;Ops provide a cloud-like environment. 
+Devs deploy to a transparent cloud-like environment. Devs are responsible for deployment to production!&lt;/p&gt;
+
+&lt;p&gt;Cloud-like means, every machine deployed to must be same-same, no matter whether it's test, staging or production.&lt;/p&gt;
+
+&lt;p&gt;Ops use an automated, repeatable process for system installation. This means coding skills are required by &lt;strong&gt;every&lt;/strong&gt; team member.
+The same clean code, versioning and other practices must be by every team member.&lt;/p&gt;
+
+&lt;p&gt;Continuous integration, build, deployment.&lt;/p&gt;
+
+&lt;p&gt;Requirements:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt; all environments are guaranteed to be identical&lt;/li&gt;
+&lt;li&gt; Devs have &lt;em&gt;reasonable&lt;/em&gt; access to the infrastructure&lt;/li&gt;
+&lt;li&gt; Personal User data must be protected and inaccessible&lt;/li&gt;
+&lt;/ul&gt;&lt;h3&gt;How far have we come?&lt;/h3&gt;
+
+&lt;p&gt;Here at &lt;a href="http://www.anixe.pl"&gt;anixe&lt;/a&gt;, our current workflow looks as follows. &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt; Devs develop software, it is unit and integration tested&lt;/li&gt;
+&lt;li&gt; One some projects: Admins deploy prebuilt packages including the configuration for the target environment. NO manual editing of config files is allowed, every config for every environment is under source control.
+All applications config files are the same. Differences per platform are in a separate configuration file. Database schema changes are bundled in the deploy and run automatically.
+We haven't figured out how to do automatic data migrations, yet.&lt;/li&gt;
+&lt;li&gt; On other projects: Ops run an automated deploy script (home-made for .net applications), which takes care of everything, handles backups, rollbacks, etc. &lt;/li&gt;
+&lt;li&gt; On ruby projects:  We use currently capistrano and Devs deploy themselves. We use here mongo as database, so deployment is easy.&lt;/li&gt;
+&lt;li&gt; Ops verify if everything went smoothly and notify customers about the outcome&lt;/li&gt;
+&lt;li&gt; For linux deployments are preparing an installer using &lt;a href="http://babushka.me"&gt;babushka&lt;/a&gt;, which does test-driven-sysadmin installation.&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;Generally linux deployment is so much easier, a fully automated and test driven platform installation within a couple of days. The same on Windows took us over a month.&lt;/p&gt;
+
+&lt;p&gt;After the separation of Devs and Ops we have developed a new anti-pattern which is over the wall deployment. Devs deliver packages and let Ops do the rest.&lt;/p&gt;
+
+&lt;p&gt;Now as we are approaching a new age of automation of deployment, we currently face another anti-pattern, and that is that everybody in the organization wants to use their own set of tools. 
+Some use dos-batch programs, some use VB scripts, some bash scripts and so on.&lt;/p&gt;
+
+&lt;h3&gt;References&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="http://www.enterprisemanagement.com/research/asset.php?id=1569"&gt;Agile IT: A Better Approach to Application Development, Deployment, and Management&lt;/a&gt;&lt;br&gt;&lt;a href="http://blogs.forrester.com/mike_gualtieri/11-02-07-i_dont_want_devops_i_want_noops"&gt;I Don't Want DevOps. I Want NoOps.&lt;/a&gt;&lt;br&gt;&lt;a href="http://dev2ops.org/blog/2010/2/22/what-is-devops.html"&gt;What is DevOps?&lt;/a&gt;
+&lt;a href="http://somic.org/2010/03/02/the-rise-of-devops/"&gt;The Rise of DevOps&lt;/a&gt;&lt;br&gt;&lt;a href="http://www.rajiv.com/blog/2009/03/17/technology-department/"&gt;Organizing a Web Technology Department&lt;/a&gt;
+&lt;a href="http://www.kartar.net/2010/02/what-devops-means-to-me/"&gt;What DevOps means to me…&lt;/a&gt;&lt;br&gt;&lt;a href="http://www.jedi.be/blog/2010/02/12/what-is-this-devops-thing-anyway/"&gt;What Is This Devops Thing, Anyway?&lt;/a&gt;&lt;br&gt;&lt;a href="http://www.computerworlduk.com/in-depth/applications/2792/agile-isnt-just-an-application-development-method/"&gt;Agile isn't just an application development method&lt;/a&gt;&lt;br&gt;&lt;a href="http://agileoperations.net/index.php?/archives/20-Agile-Manifesto-co-author-encourages-Agile-Operations.html"&gt;AGILE MANIFESTO CO-AUTHOR ENCOURAGES AGILE OPERATIONS&lt;/a&gt;&lt;br&gt;&lt;a href="http://dev2ops.org/blog/2010/2/18/deployment-management-design-patterns-for-devops.html"&gt;Deployment management design patterns for DevOps&lt;/a&gt;
+&lt;a href="http://en.wikipedia.org/wiki/DevOps"&gt;Wikipedia on Devops&lt;/a&gt;&lt;/p&gt;</content>
+  </entry>
 </feed>
 
