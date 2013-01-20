@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://blog.agirei.com/</id>
   <title>agirei</title>
-  <updated>2012-02-10T08:00:00Z</updated>
+  <updated>2013-01-20T19:00:00Z</updated>
   <link rel="alternate" href="http://blog.agirei.com/"/>
   <link rel="self" href="http://blog.agirei.com/rss.xml"/>
   <author>
@@ -10,10 +10,10 @@
     <uri>http://github.com/pzol</uri>
   </author>
   <entry>
-    <id>tag:blog.agirei.com,2012-02-10:/2013/01/moving-from-octopress-to-nanoc/</id>
+    <id>tag:blog.agirei.com,2013-01-20:/2013/01/moving-from-octopress-to-nanoc/</id>
     <title type="html">Moving from Octopress to Nanoc</title>
-    <published>2012-02-10T08:00:00Z</published>
-    <updated>2012-02-10T08:00:00Z</updated>
+    <published>2013-01-20T19:00:00Z</published>
+    <updated>2013-01-20T19:00:00Z</updated>
     <link rel="alternate" href="http://blog.agirei.com/2013/01/moving-from-octopress-to-nanoc/"/>
     <content type="html">&lt;p&gt;Finally got my stuff together to move from Octopress to &lt;a href="http://nanoc.stoneship.org/"&gt;nanoc&lt;/a&gt;. Octopress was fine, but the structure drove me wild!&lt;/p&gt;
 
