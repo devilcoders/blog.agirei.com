@@ -194,8 +194,8 @@ ul, ol, dl {
 hr {
   height: 1px;
   line-height: 1px;
-  margin-top: 1em;
-  padding-bottom: 1em;
+  margin-top: 2em;
+  margin-bottom: 2em;
   border: none;
   background: transparent url('../images/hr.png') 50% 0 no-repeat;
 }
@@ -301,7 +301,6 @@ dl dt {
 }
 
 footer {
-  background: transparent url('../images/hr.png') 0 0 no-repeat;
   margin-top: 40px;
   padding-top: 20px;
   padding-bottom: 30px;
