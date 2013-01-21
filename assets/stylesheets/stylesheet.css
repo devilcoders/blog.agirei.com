@@ -11,6 +11,10 @@ section.post aside {
   width: 14.70196%; }
   section.post aside:last-child {
     margin-right: 0; }
+  section.post aside p {
+    margin: 0;
+    font-size: 13px;
+    text-align: right; }
 section.post article {
   display: block;
   float: left;
@@ -104,10 +108,10 @@ header {
   padding-bottom: 25px; }
 
 header h1 {
-  font-family: "Chivo", "Helvetica Neue", Helvetica, Arial, serif;
+  font-family: "PT Serif", "Georgia", "Helvetica Neue", Arial, sans-serif;
   font-weight: 900;
   letter-spacing: -1px;
-  font-size: 48px;
+  font-size: 55px;
   color: #303030;
   line-height: 1.2; }
 
@@ -133,6 +137,14 @@ header h2 {
     display: table; }
   .inner:after {
     clear: both; }
+  @media screen and (max-width: 480px) {
+    .inner {
+      display: block;
+      float: left;
+      margin-right: 16.03631%;
+      width: 41.98184%; }
+      .inner:last-child {
+        margin-right: 0; } }
 
 #container .inner img {
   max-width: 100%; }
