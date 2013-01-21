@@ -1,0 +1,10 @@
+<% sorted_articles.each do |post| %>
+  <section class='post'>
+    <aside><%= post[:created_at] %></aside>
+    <article>
+      <h1><%= link_to post[:title], post.path %></h1>
+      <%= get_post_start(post) %>
+    </article>
+    <hr>
+  </section>
+<% end %>

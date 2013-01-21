@@ -1,0 +1,32 @@
+<% render 'default' do %>
+  <section class="post">
+    <aside><%= item[:created_at] %></aside>
+    <article>
+      <h1><%= item[:title] %></h1>
+      <%= yield %>
+    </article>
+  </section>
+
+  <section class="social">
+    <a href="https://twitter.com/pzol" class="twitter-follow-button" data-show-count="false">Follow @pzol</a>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-via="pzol">Tweet</a>
+    <div id="fb-root"></div>
+    <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+  </section>
+
+  <section class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'agirei';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </section>
+<% end %>
