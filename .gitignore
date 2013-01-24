@@ -1,4 +1,5 @@
-output
+output/
+output.diff
 tmp
 crash.log
 .bundle
