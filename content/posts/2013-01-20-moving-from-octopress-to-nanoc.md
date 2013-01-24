@@ -2,6 +2,9 @@
 title: "Moving from Octopress to Nanoc"
 created_at: 2013-01-20 20:00
 kind: article
+categories:
+  - nanoc
+author_name: Piotr Zolnierek
 ---
 
 Finally got my stuff together to move from Octopress to [nanoc](http://nanoc.stoneship.org/). Octopress was fine, but the structure drove me wild!

@@ -2,7 +2,11 @@
 kind: article
 title: "Taming the Capybara"
 created_at: 2012-02-02 10:00
-categories: testing bdd atdd ruby capybara rspec
+categories:
+  - testing
+  - capybara
+  - rspec
+author_name: Piotr Zolnierek
 ---
 
 Recently I work a lot on Acceptance Tests and how to write them in a clean way.

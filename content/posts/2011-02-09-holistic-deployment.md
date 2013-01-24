@@ -2,7 +2,10 @@
 kind: article
 title: "Holistic Deployment"
 created_at: 2011-02-09 02:14
-categories: deployment
+categories:
+  - agile
+  - deployment
+author_name: Piotr Zolnierek
 ---
 Your agile team has built great software, only to find out it cannot work in production?  
 

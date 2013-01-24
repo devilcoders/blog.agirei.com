@@ -2,7 +2,10 @@
 kind: article
 title: "Experience vs Attitude"
 created_at: 2011-02-14 14:00
-categories: agile
+categories:
+  - agile
+  - hiring
+author_name: Piotr Zolnierek
 ---
 When interviewing new people for a job as an agile developer, what qualities should you be looking for?
 Is it sufficient to check the previous experience and the knowledge in the areas he will be needing for your projects or is the attitude more important?

@@ -2,7 +2,9 @@
 kind: article
 title: "OOP Acceptance Tests with Rspec"
 created_at: 2012-02-02 11:11
-categories: testing, bdd, atdd
+categories:
+  - testing
+author_name: Piotr Zolnierek
 ---
 This is part two of my blog post about Acceptance Testing. In the previous post I outlined some basics, now let's get into the code.
 

@@ -1,8 +1,12 @@
 <% render 'default' do %>
   <section class="post">
-    <aside><%= item[:created_at] %></aside>
+    <h1><%= item[:title] %></h1>
+    <aside>
+      <p class="date"><%= get_pretty_date(item) %></p>
+      <p class="author"><%= item[:author_name] %></p>
+      <p class="tags"><%= link_categories(item[:categories] || []).join(', ') %></p>
+    </aside>
     <article>
-      <h1><%= item[:title] %></h1>
       <%= yield %>
     </article>
   </section>

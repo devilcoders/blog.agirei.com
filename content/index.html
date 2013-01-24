@@ -1,9 +1,13 @@
-<% sorted_articles.each do |post| %>
+<% sorted_articles.each do |item| %>
   <section class='post'>
-    <aside><%= post[:created_at] %></aside>
+    <h1><%= link_to item[:title], item.path %></h1>
+    <aside>
+      <p><%= get_pretty_date(item) %></p>
+      <p><%= item[:author_name] %></p>
+      <p><%= link_categories(item[:categories] || []).join(', ') %></p>
+    </aside>
     <article>
-      <h1><%= link_to post[:title], post.path %></h1>
-      <%= get_post_start(post) %>
+      <%= get_post_start(item) %>
     </article>
     <hr>
   </section>

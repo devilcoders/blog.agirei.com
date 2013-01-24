@@ -1,0 +1,15 @@
+<div id="home">&lArr; <a href="/">Return home</a></div>
+
+<h1 class="top"><%= @item[:h1] %></h1>
+
+<% if @item[:posts].length > 0 %>
+<ul class="archive">
+  <% @item[:posts].each do |p| %>
+  <li>
+    <span><%= p.attributes[:created_at] %> &middot; </span>
+    <a href="<%= relative_path_to(p) %>"><%= p.attributes[:title] %></a>
+  </li>
+  <% end %>
+</ul>
+
+<% end %>
