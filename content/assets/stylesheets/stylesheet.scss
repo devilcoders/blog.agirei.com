@@ -1,52 +1,6 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
-$mobile: new-breakpoint(max-width 798px 8);
-
-div.inner {
-  @include outer-container;
-}
-
-section.post {
-  h1 {
-    @include media($mobile) {
-      @include shift(0);
-    }
-    @include row(table);
-    @include shift(2);
-  }
-
-  aside {
-    @include span-columns(2);
-    @include media($mobile) {
-      @include span-columns(8);
-    }
-
-    p {
-      @include media($mobile) {
-        display: inline;
-        margin-bottom: 2em;
-      }
-      margin: 0;
-      font-size: 13px;
-      text-align: right;
-    }
-  }
-
-  article {
-    @include span-columns(8);
-    @include media($mobile) {
-      @include span-columns(8);
-      float: none;
-    }
-  }
-}
-
-section.social, section.comments {
-  @include shift(2);
-  @include span-columns(8);
-}
-
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -341,3 +295,56 @@ dl dt {
 
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
 @media only screen and (max-width: 479px) {}
+
+
+
+/* ================================================== */
+$mobile: new-breakpoint(max-width 798px 8);
+
+div.inner {
+  @include outer-container;
+}
+
+section { clear: both; }
+
+section.post {
+  margin-bottom: 30px;
+
+  h1 {
+    @include media($mobile) {
+      @include shift(0);
+    }
+    @include shift(2);
+  }
+
+  aside {
+    @include span-columns(2);
+    @include media($mobile) {
+      @include span-columns(8);
+    }
+
+    p {
+      @include media($mobile) {
+        display: inline;
+        margin-bottom: 2em;
+      }
+      margin: 0;
+      font-size: 13px;
+      text-align: right;
+    }
+  }
+
+  article {
+    @include span-columns(8);
+    @include media($mobile) {
+      @include span-columns(8);
+      float: none;
+    }
+  }
+}
+
+section.social, section.comments {
+  @include shift(2);
+  @include span-columns(8);
+}
+
