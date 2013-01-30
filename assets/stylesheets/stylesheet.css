@@ -308,6 +308,13 @@ section.post {
         float: none; }
         section.post article:last-child {
           margin-right: 0; } }
+  section.post hr {
+    clear: both;
+    margin-top: 150px;
+    margin-left: 12.94733%; }
+    @media screen and (max-width: 798px) {
+      section.post hr {
+        margin-left: 0%; } }
 
 section.social, section.comments {
   margin-left: 25.89467%;
