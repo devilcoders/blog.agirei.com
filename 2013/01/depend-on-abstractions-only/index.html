@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link href="http://feeds.feedburner.com/pzol-agirei" rel="alternate" title="Agirei by pzol" type="application/rss+xml" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/syntax.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Depend on abstractions only - blog.agirei.com by pzol</title>
+
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+        <header>
+          <a href="/">
+            <h1>ædʒirei</h1>
+          </a>
+          <h2>pzol blogging (maybe)</h2>
+          <hr>
+        </header>
+
+        
+  <section class="post">
+    <h1>Depend on abstractions only</h1>
+    <aside>
+      <p class="date">January 30, 2013</p>
+      <p class="author">Piotr Zolnierek</p>
+      <p class="tags"><a href="/categories/hexagonal.html">hexagonal</a>, <a href="/categories/di.html">di</a>, <a href="/categories/ioc.html">ioc</a></p>
+    </aside>
+    <article>
+      <p>Inversion of control could be understood as synonymous to hexagonal architecture or ports and adapters. At least that's what in my, not so humble opinion, it boils down to. It helps to make your application better understandable and open for changes in the future.</p>
+
+<!-- more -->
+
+<p>The fundamental idea in a hexagonal architecture is to use inversion of control or in other words to <strong><em>depend upon abstractions only</em></strong> when it comes to external components. As an aside, dependency injection, is just one technique to achieve this, another might be a service locator pattern.</p>
+
+<h2>An simplistic example, logging</h2>
+
+<p>Given that we have an application, which is small-ish today, but we assume will grow in complexity over time.</p>
+
+<p>We could easily sprinkle our code with logger.info() statements, where logger is a global variable. You can see this in many notable gems, apps.</p>
+
+<p>The first thing I dislike about using the builtin ruby logger or any other replacement is that the use slightly different arguments, one uses argument and block, another different params and so on. But that's fine! Everyone has his one view of how things should be. For my particular application I have different needs than the rest of the world and that's why <strong><em>my</em></strong> logger needs to have within my application it's own protocol or interface.</p>
+
+<p>I need to log informational message and I need to handle with errors.</p>
+
+<pre><code class="language-ruby"><span class="k">class</span> <span class="nc">LoggerAdapter</span>
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="n">facility</span><span class="p">,</span> <span class="n">short</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="n">facility</span><span class="p">,</span> <span class="n">short</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>In my logs I want to know - in a structured way - where the message came from, the class or module, a short message and optionally a long description. A web page for viewing logs displays the facility and short message, the full message with all nitty-gritty details can be viewed when clicked. In other scenarios, the short message might be for the end-user, the full message might contain sensitive data for the developers.</p>
+
+<p>The two methods above are the only one I will use in my application, I don't need debugging or anything else.</p>
+
+<h2>Wrapping external dependencies</h2>
+
+<p>Now, we need to communicate with the outside world (Monads anybody?). Now of course you could substitute the standard logger in your web application with your own implementation, but then you need to implement all the methods in that interface because somebody else might expect that it should behave like a standard ruby logger. This way you make it explicit. That this is part of your domain. Some might argue that logging is not part of the domain, ever, but let's leave this discussion aside and go on with the bold assumption that in this particular case it is (I can totally prove this on a real world example - ask me at the next (drug meeting)[<a href="http://drug.org.pl">http://drug.org.pl</a>] or at some conference).</p>
+
+<pre><code class="language-ruby"><span class="k">class</span> <span class="nc">LoggerAdapter</span>
+    <span class="k">def</span> <span class="nf">initialize</span>
+        <span class="vi">@syslog</span> <span class="o">=</span> <span class="no">Syslogger</span><span class="o">.</span><span class="n">new</span>
+        <span class="vi">@logger</span> <span class="o">=</span> <span class="ss">Lumberjack</span><span class="p">:</span><span class="ss">:Logger</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"application.log"</span><span class="p">,</span> <span class="ss">:time_format</span> <span class="o">=&gt;</span> <span class="s2">"%m/%d/%Y %H:%M:%S"</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="n">facility</span><span class="p">,</span> <span class="n">short</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+        <span class="vi">@logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"</span><span class="si">#{</span><span class="n">category</span><span class="si">}</span><span class="s2"> - </span><span class="si">#{</span><span class="n">short</span><span class="si">}</span><span class="se">\n</span><span class="si">#{</span><span class="n">full</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="n">facility</span><span class="p">,</span> <span class="n">short</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+        <span class="vi">@syslog</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">"</span><span class="si">#{</span><span class="n">category</span><span class="si">}</span><span class="s2"> - </span><span class="si">#{</span><span class="n">short</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">        @logger.error("</span><span class="c1">#{category} - #{short}\n#{full}")</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>All external dependencies are handled in this adapter. Their details do not leak into the application. Changing behavior becomes easy. And in a test this can be easily stubbed.</p>
+
+<h2>An Use Case Implementation</h2>
+
+<pre><code class="language-ruby"><span class="k">class</span> <span class="nc">SomeUseCase</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="no">LoggerAdapter</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="n">another_dep</span><span class="o">=</span><span class="no">Dependency</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+        <span class="vi">@logger</span><span class="p">,</span> <span class="vi">@another_dep</span> <span class="o">=</span> <span class="n">logger</span><span class="p">,</span> <span class="n">another_dep</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">call</span>
+        <span class="k">begin</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">work</span>
+            <span class="vi">@logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"some use case"</span><span class="p">,</span> <span class="s2">"Success: </span><span class="si">#{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">result</span>
+        <span class="k">rescue</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+            <span class="vi">@logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"some use case"</span><span class="p">,</span> <span class="n">ex</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="n">ex</span><span class="p">)</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">work</span>
+        <span class="c1"># actual work done here</span>
+        <span class="vi">@another_dep</span><span class="o">.</span><span class="n">do_stuff</span><span class="p">()</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Take notice that the inner hexagon - the use case object, receives readily instantiated objects for the collaboration! We depend only on the abstraction of the loggers, their implementation details along with instantiation are encapsulated in the adapter.</p>
+
+<h2>Testing with adapters</h2>
+
+<p>This becomes piece of cake, it adheres to the rule, that you should only test what you own, or as Michael Feathers puts it, you test at the seams.</p>
+
+<pre><code class="language-ruby"><span class="n">describe</span> <span class="no">Something</span> <span class="k">do</span>
+    <span class="n">it</span> <span class="s2">"works on a sunny day"</span> <span class="k">do</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">stub</span><span class="p">(</span><span class="ss">:info</span> <span class="o">=&gt;</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">:error</span> <span class="o">=&gt;</span> <span class="kp">nil</span><span class="p">)</span>
+        <span class="n">use_case</span> <span class="o">=</span> <span class="no">SomeUseCase</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">should_receive</span><span class="p">(</span><span class="ss">:info</span><span class="p">)</span>
+        <span class="n">use_case</span><span class="o">.</span><span class="n">call</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="s2">"done"</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>As loging is part of this use cases domain, we also needed to make sure, that the info has been called, additionally we could have verified the log message itself.</p>
+
+<h2>Conclusions</h2>
+
+<ol>
+<li>Creating adapters is not only to be able to do dependency injection for better testability, but also as a way to work with code as you understand it best.</li>
+<li>Every software created in more than 1-2 weeks of work, requires some architecture.</li>
+<li>Ruby is not immune to the design problems discovered in Java, Cpp, etc, hence learning some more seasoned language will be benefitial to our expertise in Ruby.</li>
+</ol>
+    </article>
+  </section>
+
+  <section class="social">
+    <a href="https://twitter.com/pzol" class="twitter-follow-button" data-show-count="false">Follow @pzol</a>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-via="pzol">Tweet</a>
+    <div id="fb-root"></div>
+    <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+  </section>
+
+  <section class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'agirei';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </section>
+
+
+        <footer>
+          blog.agirei.com is maintained by <a href="https://github.com/pzol">pzol</a><br>
+          Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        <script type="text/javascript">
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+          try {
+            var pageTracker = _gat._getTracker("UA-4944917-10");
+          pageTracker._trackPageview();
+          } catch(err) {}
+        </script>
+
+      </div>
+    </div>
+  </body>
+</html>
+
