@@ -3,78 +3,6 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-div.inner {
-  *zoom: 1;
-  max-width: 68em;
-  margin-left: auto;
-  margin-right: auto; }
-  div.inner:before, div.inner:after {
-    content: " ";
-    display: table; }
-  div.inner:after {
-    clear: both; }
-
-section.post h1 {
-  *zoom: 1;
-  display: table;
-  margin-left: 17.05961%; }
-  @media screen and (max-width: 798px) {
-    section.post h1 {
-      margin-left: 0%; } }
-  section.post h1:before, section.post h1:after {
-    content: " ";
-    display: table; }
-  section.post h1:after {
-    clear: both; }
-section.post aside {
-  display: block;
-  float: left;
-  margin-right: 2.35765%;
-  width: 14.70196%; }
-  section.post aside:last-child {
-    margin-right: 0; }
-  @media screen and (max-width: 798px) {
-    section.post aside {
-      display: block;
-      float: left;
-      margin-right: 3.57866%;
-      width: 100%; }
-      section.post aside:last-child {
-        margin-right: 0; } }
-  section.post aside p {
-    margin: 0;
-    font-size: 13px;
-    text-align: right; }
-    @media screen and (max-width: 798px) {
-      section.post aside p {
-        display: inline;
-        margin-bottom: 2em; } }
-section.post article {
-  display: block;
-  float: left;
-  margin-right: 2.35765%;
-  width: 65.88078%; }
-  section.post article:last-child {
-    margin-right: 0; }
-  @media screen and (max-width: 798px) {
-    section.post article {
-      display: block;
-      float: left;
-      margin-right: 3.57866%;
-      width: 100%;
-      float: none; }
-      section.post article:last-child {
-        margin-right: 0; } }
-
-section.social, section.comments {
-  margin-left: 25.89467%;
-  display: block;
-  float: left;
-  margin-right: 2.35765%;
-  width: 65.88078%; }
-  section.social:last-child, section.comments:last-child {
-    margin-right: 0; }
-
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -319,3 +247,78 @@ dl dt {
     margin: 0 auto; } }
 /* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+/* ================================================== */
+div.inner {
+  *zoom: 1;
+  max-width: 68em;
+  margin-left: auto;
+  margin-right: auto; }
+  div.inner:before, div.inner:after {
+    content: " ";
+    display: table; }
+  div.inner:after {
+    clear: both; }
+
+section {
+  clear: both; }
+
+section.post h1 {
+  *zoom: 1;
+  display: table;
+  margin-left: 17.05961%; }
+  @media screen and (max-width: 798px) {
+    section.post h1 {
+      margin-left: 0%; } }
+  section.post h1:before, section.post h1:after {
+    content: " ";
+    display: table; }
+  section.post h1:after {
+    clear: both; }
+section.post aside {
+  display: block;
+  float: left;
+  margin-right: 2.35765%;
+  width: 14.70196%; }
+  section.post aside:last-child {
+    margin-right: 0; }
+  @media screen and (max-width: 798px) {
+    section.post aside {
+      display: block;
+      float: left;
+      margin-right: 3.57866%;
+      width: 100%; }
+      section.post aside:last-child {
+        margin-right: 0; } }
+  section.post aside p {
+    margin: 0;
+    font-size: 13px;
+    text-align: right; }
+    @media screen and (max-width: 798px) {
+      section.post aside p {
+        display: inline;
+        margin-bottom: 2em; } }
+section.post article {
+  display: block;
+  float: left;
+  margin-right: 2.35765%;
+  width: 65.88078%; }
+  section.post article:last-child {
+    margin-right: 0; }
+  @media screen and (max-width: 798px) {
+    section.post article {
+      display: block;
+      float: left;
+      margin-right: 3.57866%;
+      width: 100%;
+      float: none; }
+      section.post article:last-child {
+        margin-right: 0; } }
+
+section.social, section.comments {
+  margin-left: 25.89467%;
+  display: block;
+  float: left;
+  margin-right: 2.35765%;
+  width: 65.88078%; }
+  section.social:last-child, section.comments:last-child {
+    margin-right: 0; }
