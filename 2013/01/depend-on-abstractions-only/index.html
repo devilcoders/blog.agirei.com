@@ -73,7 +73,7 @@
 
 <h2>Wrapping external dependencies</h2>
 
-<p>Now, we need to communicate with the outside world (Monads anybody?). Now of course you could substitute the standard logger in your web application with your own implementation, but then you need to implement all the methods in that interface because somebody else might expect that it should behave like a standard ruby logger. This way you make it explicit. That this is part of your domain. Some might argue that logging is not part of the domain, ever, but let's leave this discussion aside and go on with the bold assumption that in this particular case it is (I can totally prove this on a real world example - ask me at the next (drug meeting)[<a href="http://drug.org.pl">http://drug.org.pl</a>] or at some conference).</p>
+<p>Now, we need to communicate with the outside world (Monads anybody?). Now of course you could substitute the standard logger in your web application with your own implementation, but then you need to implement all the methods in that interface because somebody else might expect that it should behave like a standard ruby logger. This way you make it explicit. That this is part of your domain. Some might argue that logging is not part of the domain, ever, but let's leave this discussion aside and go on with the bold assumption that in this particular case it is.</p>
 
 <pre><code class="language-ruby"><span class="k">class</span> <span class="nc">LoggerAdapter</span>
     <span class="k">def</span> <span class="nf">initialize</span>
