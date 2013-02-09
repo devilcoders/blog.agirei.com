@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link href="http://feeds.feedburner.com/pzol-agirei" rel="alternate" title="Agirei by pzol" type="application/rss+xml" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/syntax.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Always-tell-a-story - blog.agirei.com by pzol</title>
+
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+        <header>
+          <a href="/">
+            <h1>ædʒirei</h1>
+          </a>
+          <h2>pzol blogging (maybe)</h2>
+          <hr>
+        </header>
+
+        
+  <section class="post">
+    <h1>Always-tell-a-story</h1>
+    <aside>
+      <p class="date">February 6, 2013</p>
+      <p class="author">Piotr Zolnierek</p>
+      <p class="tags"><a href="/categories/hexagonal.html">hexagonal</a>, <a href="/categories/di.html">di</a>, <a href="/categories/ioc.html">ioc</a>, <a href="/categories/use case.html">use case</a></p>
+    </aside>
+    <article>
+      <h1>Outline</h1>
+
+<pre><code>[ ] Abstract
+[ ] Examples
+[ ] Benefits
+[ ] Conclusion
+</code></pre>
+
+<h1>Content</h1>
+
+<pre><code>[x] story like class name
+[ ] acts as controller as in head of control within the inner-hexagon (logic-hexagon)
+[ ] delegate tasks to command style classes
+[x] flow only, actions should be  readable as prose
+</code></pre>
+
+<h1>Abstract</h1>
+
+<p>Nowadays everybody has a sense, that classes should do only one thing, that they should be responsible for doing exactly a single notion. That's called SRP - single responsibility principle.</p>
+
+<p>If every class is doing only one small thing, then who knows how they belong together?</p>
+
+<p>Enter the <strong>use case class</strong> or <strong>user story</strong>, I liked to call it the controller or dispatcher previously. When we talk about such entities at work (<a href="http://www.anixe.pl">anixe</a>) we often speak about the head of control, which is a nice metaphor, as this gives the impression that it is in charge of the flow, which is exactly what I want it to be.</p>
+
+<!-- more -->
+
+<h2>The story</h2>
+
+<p>Imagine we have a common scenario where a user submits a web form which contains his billing data and the items he ordered. Let's assumed we have captured the request variables in two variables: billing and items.</p>
+
+<pre><code class="language-ruby"><span class="k">class</span> <span class="nc">UserPostsOrder</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="no">OrderValidator</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="no">OrderRepository</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+    <span class="vi">@validator</span><span class="p">,</span> <span class="vi">@repository</span> <span class="o">=</span> <span class="n">validator</span><span class="p">,</span> <span class="n">repository</span>
+  <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">billing</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+    <span class="vi">@validator</span><span class="o">.</span><span class="n">validate</span> <span class="n">billing</span><span class="p">,</span> <span class="n">items</span>
+    <span class="vi">@repository</span><span class="o">.</span><span class="n">save</span> <span class="n">billing</span><span class="p">,</span> <span class="n">items</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>The initialize method sets up the dependencies and by my convention is the only method which is allowed to modify the class's internal state (in practice this means that only here instance variables may be modified). Collaborators (Adapters) passed in as dependencies may receive messages which modify the outside world.</p>
+
+<p>The post methods gets the raw, i.e. unvalidated data from the outside world (the web-ui adapter, aka Rails, Padrino, Sinatra etc).</p>
+
+<p>Other examples of good class names in this convention might be:
+- UserSubscribesNewsletter
+- AdminCreatesUser
+- AdminResetsPassword
+- UserReceivesEmail</p>
+
+<h2>Stories within stories</h2>
+
+<p>Let's have a look at the last one. Let's make it a bit more complicated. When a big story contains a smaller one.</p>
+
+<pre><code class="language-ruby"><span class="k">class</span> <span class="nc">UserPostsOrder</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="no">OrderValidator</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="no">OrderRepository</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+    <span class="vi">@validator</span><span class="p">,</span> <span class="vi">@repository</span><span class="p">,</span> <span class="vi">@mailer</span> <span class="o">=</span> <span class="n">validator</span><span class="p">,</span> <span class="n">repository</span><span class="p">,</span> <span class="n">mailer</span>
+  <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">billing</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+    <span class="vi">@validator</span><span class="o">.</span><span class="n">validate</span> <span class="n">billing</span><span class="p">,</span> <span class="n">items</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">prepare_order</span><span class="p">(</span><span class="n">billing</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+    <span class="vi">@repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+    <span class="n">send_email</span><span class="p">(</span><span class="n">billing</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+  <span class="k">end</span>
+
+<span class="kp">private</span>
+  <span class="k">def</span> <span class="nf">prepare_order</span><span class="p">(</span><span class="n">billing</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+    <span class="n">processor</span> <span class="o">=</span> <span class="no">PrepareOrder</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">billing</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+    <span class="n">prcocessor</span><span class="o">.</span><span class="n">order</span>
+  <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">send_email</span><span class="p">(</span><span class="n">billing</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+    <span class="n">uc</span>         <span class="o">=</span> <span class="no">UserReceivesEmail</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@mailer</span><span class="p">)</span>
+    <span class="c1"># we know it contains an email as we have run validation first!</span>
+    <span class="n">user_email</span> <span class="o">=</span> <span class="n">billing</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:email</span><span class="p">)</span>
+    <span class="n">uc</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>The main method <code>post</code> reads like prose, it shows you step by step what happens, you should be even able to show this to non-techie people and they will understand it.</p>
+
+<p>If anything goes wrong, then errors will be raised in the collaborators - repository, validator, so that the flow will stop.</p>
+
+<h2>Folder organization</h2>
+
+<p>As I see my use case as an entity which could be pulled out of the application and plugged in anywhere else here is where I place it in my folder structure:</p>
+
+<pre><code>├── lib
+│   ├── hexagonal
+│   │   ├── user_posts_order
+│   │   │   ├── order_repository.rb     # database adapter
+│   │   │   ├── order_validator.rb
+│   │   │   └── process_order.rb
+│   │   └── user_posts_order.rb
+</code></pre>
+
+<h2>Reusability</h2>
+
+<p>Once I would need the <code>OrderRepository</code> also in another entity, I would push it up to the lib/hexagonal directory.</p>
+
+<h2>Conclusion</h2>
+
+<p>The user story entity should be the center hexagon. It should be on of the many hexagons in your application, each implementing a single use case or user story.</p>
+
+<p>This is the second post in my hexagonal architecture series, see also the first one <a href="/2013/01/depend-on-abstractions-only">Depend on abstractions only</a>.</p>
+    </article>
+  </section>
+
+  <section class="social">
+    <a href="https://twitter.com/pzol" class="twitter-follow-button" data-show-count="false">Follow @pzol</a>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-via="pzol">Tweet</a>
+    <div id="fb-root"></div>
+    <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+  </section>
+
+  <section class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'agirei';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </section>
+
+
+        <footer>
+          blog.agirei.com is maintained by <a href="https://github.com/pzol">pzol</a><br>
+          Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        <script type="text/javascript">
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+          try {
+            var pageTracker = _gat._getTracker("UA-4944917-10");
+          pageTracker._trackPageview();
+          } catch(err) {}
+        </script>
+
+      </div>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link href="http://feeds.feedburner.com/pzol-agirei" rel="alternate" title="Agirei by pzol" type="application/rss+xml" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/syntax.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/assets/stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Create stories as hexagons - blog.agirei.com by pzol</title>
+
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+        <header>
+          <a href="/">
+            <h1>ædʒirei</h1>
+          </a>
+          <h2>pzol blogging (maybe)</h2>
+          <hr>
+        </header>
+
+        
+  <section class="post">
+    <h1>Create stories as hexagons</h1>
+    <aside>
+      <p class="date">February 15, 2013</p>
+      <p class="author">Piotr Zolnierek</p>
+      <p class="tags"><a href="/categories/hexagonal.html">hexagonal</a>, <a href="/categories/di.html">di</a>, <a href="/categories/ioc.html">ioc</a>, <a href="/categories/use case.html">use case</a></p>
+    </aside>
+    <article>
+      <h2>The Dependencies</h2>
+
+<p>I am using a per use case dependency class, which some may find similar to something called a static service locator. I considered calling this context, but dependencies feels more like a liability. Something whose footprint should be kept minimalistic.</p>
+
+<pre><code class="language-ruby"><span class="k">class</span> <span class="nc">UserPostsOrder</span>
+  <span class="k">class</span> <span class="nc">Dependencies</span>
+    <span class="k">def</span> <span class="nf">order_repository</span>
+      <span class="vi">@order_repository</span> <span class="o">||=</span> <span class="no">OrderRepositoryAdapter</span><span class="o">.</span><span class="n">new</span>
+    <span class="k">end</span>
+    <span class="k">def</span> <span class="nf">order_validator</span>
+      <span class="vi">@order_validator</span> <span class="o">||=</span> <span class="no">BillingValidator</span><span class="o">.</span><span class="n">new</span>
+    <span class="k">end</span>
+    <span class="k">def</span> <span class="nf">logger</span>
+      <span class="vi">@logger</span> <span class="o">||=</span> <span class="no">LoggerAdapter</span><span class="o">.</span><span class="n">new</span>
+    <span class="k">end</span> 
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>All collaborators should normally be instances initialized and memoized within the class. A class or module is practicable in some cases. The thing to keep in mind is, that consumers of the Dependency class should not be aware of this. They send a message to a ready to use service (an object in the Smalltalk, Objective-C sense). Create a new clean class for every call if cannot be reused as it uses some internal state.</p>
+
+<p>As I like to keep all kinds of dependencies, especially external ones to a minimum, a simple poro-style memoization instead of some fancy gem is preferred.</p>
+
+<h2>Logging</h2>
+
+<pre><code class="language-ruby"><span class="k">class</span> <span class="nc">UserPostsOrder</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="n">deps</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">deps</span><span class="p">)</span>
+    <span class="no">LoggerProxy</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">deps</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+  <span class="k">end</span>
+  <span class="k">class</span> <span class="nc">LoggerProxy</span> <span class="o">&lt;</span> <span class="no">BasicObject</span>
+    <span class="k">def</span> <span class="nf">initalize</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+      <span class="vi">@target</span><span class="p">,</span> <span class="vi">@logger</span> <span class="o">=</span> <span class="n">target</span><span class="p">,</span> <span class="n">logger</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+      <span class="vi">@target</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="k">def</span> <span class="nf">respond_to?</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+      <span class="vi">@target</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+      <span class="k">begin</span>
+        <span class="vi">@target</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="vi">@logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Order posted successfully"</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">inspect</span><span class="p">)</span>
+      <span class="k">rescue</span> <span class="no">UserPostsOrder</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+        <span class="vi">@logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Order not posted: </span><span class="si">#{</span><span class="n">ex</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">inspect</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+    </article>
+  </section>
+
+  <section class="social">
+    <a href="https://twitter.com/pzol" class="twitter-follow-button" data-show-count="false">Follow @pzol</a>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-via="pzol">Tweet</a>
+    <div id="fb-root"></div>
+    <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+  </section>
+
+  <section class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'agirei';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </section>
+
+
+        <footer>
+          blog.agirei.com is maintained by <a href="https://github.com/pzol">pzol</a><br>
+          Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        <script type="text/javascript">
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+          try {
+            var pageTracker = _gat._getTracker("UA-4944917-10");
+          pageTracker._trackPageview();
+          } catch(err) {}
+        </script>
+
+      </div>
+    </div>
+  </body>
+</html>
+
